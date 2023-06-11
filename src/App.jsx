@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import iconSearch from "./assets/icon-search.svg";
 // import classes from "./App.modules.scss";
+import useAxios from "axios-hooks";
 
 // let userUrl = "https://api.github.com/users/";
 
@@ -10,14 +11,32 @@ const user = axios.create({
 });
 
 function App() {
-  // const userInputValue = useRef(initialVallue);
+  // const userInputValue = useRef("octocat");
   const [userInputValue, setUserInputValue] = useState("octocat");
   const [userObj, setUSerObj] = useState();
+
+  // const [
+  //   {
+  //     name,
+  //     created_at,
+  //     public_repos,
+  //     followers,
+  //     following,
+  //     location,
+  //     blog,
+  //     twitter_username,
+  //     company,
+  //   },
+  //   refetch,
+  // ] = useAxios(`https://api.github.com/users/${userInputValue.current.value}`);
+
+  // if (loading) return <p>Loading...</p>
+  // if (error) return <p>Error!</p>
 
   useEffect(() => {
     const apiConnector = setTimeout(() => {
       async function getUser() {
-        const response = await user.get(`${"octocat"}`);
+        const response = await user.get("octocat");
         setUSerObj(response.data);
       }
       getUser();
@@ -29,9 +48,9 @@ function App() {
       clearTimeout(apiConnector);
     };
 
-    // axios.get(`${userUrl}"LevaniMigriauli"`).then((response) => {
-    //   setUSerObj(response.data);
-    // }
+    //   // axios.get(`${userUrl}"LevaniMigriauli"`).then((response) => {
+    //   //   setUSerObj(response.data);
+    //   // }
   }, []);
 
   // if (!userObj) return null;
@@ -44,11 +63,8 @@ function App() {
       setUSerObj(response.data);
     }
     getUser();
-
-    // setUserInputValue(e.target.value);
   }
 
-  console.log(userObj);
   if (userObj) {
     const {
       name,
@@ -74,7 +90,7 @@ function App() {
     );
   }
 
-  console.log(userObj);
+  // console.log(userObj);
 
   return (
     <div className="App" style={{ background: "grey" }}>
