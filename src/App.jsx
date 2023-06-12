@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useRef, useEffect, useState } from "react";
 import iconSearch from "./assets/icon-search.svg";
-// import classes from "./App.modules.scss";
-import useAxios from "axios-hooks";
-
-// let userUrl = "https://api.github.com/users/";
+import GlobalStyles from "./components/GlobalStyles";
+import { ThemeProvider } from "styled-components";
+import { defaultTheme } from "./assets/themes/defaultTheme";
 
 const user = axios.create({
   baseURL: "https://api.github.com/users/",
@@ -15,28 +14,10 @@ function App() {
   const [userInputValue, setUserInputValue] = useState("octocat");
   const [userObj, setUSerObj] = useState();
 
-  // const [
-  //   {
-  //     name,
-  //     created_at,
-  //     public_repos,
-  //     followers,
-  //     following,
-  //     location,
-  //     blog,
-  //     twitter_username,
-  //     company,
-  //   },
-  //   refetch,
-  // ] = useAxios(`https://api.github.com/users/${userInputValue.current.value}`);
-
-  // if (loading) return <p>Loading...</p>
-  // if (error) return <p>Error!</p>
-
   useEffect(() => {
     const apiConnector = setTimeout(() => {
       async function getUser() {
-        const response = await user.get("octocat");
+        const response = await user.get(userInputValue);
         setUSerObj(response.data);
       }
       getUser();
@@ -47,13 +28,7 @@ function App() {
       console.log("resp");
       clearTimeout(apiConnector);
     };
-
-    //   // axios.get(`${userUrl}"LevaniMigriauli"`).then((response) => {
-    //   //   setUSerObj(response.data);
-    //   // }
   }, []);
-
-  // if (!userObj) return null;
 
   function submitHandler(e) {
     e.preventDefault();
@@ -77,38 +52,41 @@ function App() {
       twitter_username,
       company,
     } = userObj;
-    console.log(
-      name,
-      created_at,
-      public_repos,
-      followers,
-      following,
-      location,
-      blog,
-      twitter_username,
-      company
-    );
+    // console.log(
+    //   name,
+    //   created_at,
+    //   public_repos,
+    //   followers,
+    //   following,
+    //   location,
+    //   blog,
+    //   twitter_username,
+    //   company
+    // );
   }
 
-  // console.log(userObj);
+  console.log(userObj);
 
   return (
-    <div className="App" style={{ background: "grey" }}>
-      <form
-        id="form"
-        onSubmit={submitHandler}
-        style={{ padding: "500px 600px" }}
-      >
-        <img src={iconSearch} alt="" />
-        <input
-          // ref={userInputValue}
-          value={userInputValue}
-          onChange={(e) => setUserInputValue(e.target.value)}
-        />
-        <button type="submit">Search</button>
-      </form>
-      <p>userObj</p>
-    </div>
+    <ThemeProvider theme={defaultTheme}>
+      <GlobalStyles />
+      <div className="App" style={{ background: "grey" }}>
+        <form
+          id="form"
+          onSubmit={submitHandler}
+          style={{ padding: "500px 600px" }}
+        >
+          <img src={iconSearch} alt="" />
+          <input
+            // ref={userInputValue}
+            value={userInputValue}
+            onChange={(e) => setUserInputValue(e.target.value)}
+          />
+          <button type="submit">Search</button>
+        </form>
+        <p>userObj</p>
+      </div>
+    </ThemeProvider>
   );
 }
 
