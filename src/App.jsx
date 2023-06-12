@@ -2,8 +2,10 @@ import axios from "axios";
 import { useRef, useEffect, useState } from "react";
 import iconSearch from "./assets/icon-search.svg";
 import GlobalStyles from "./components/GlobalStyles";
-import { ThemeProvider } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./assets/themes/defaultTheme";
+import moon from "./assets/imgs/icon-moon.svg";
+import sun from "./assets/imgs/icon-sun.svg";
 
 const user = axios.create({
   baseURL: "https://api.github.com/users/",
@@ -13,6 +15,8 @@ function App() {
   // const userInputValue = useRef("octocat");
   const [userInputValue, setUserInputValue] = useState("octocat");
   const [userObj, setUSerObj] = useState();
+
+  const [theme, setTheme] = useState("light");
 
   useEffect(() => {
     const apiConnector = setTimeout(() => {
@@ -70,6 +74,13 @@ function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
+      <Header>
+        <h2>devfinder</h2>
+        <button>
+          <span>{theme === "light" ? "light" : "dark"}</span>
+          <img src={theme === "light" ? sun : moon} alt="" />
+        </button>
+      </Header>
       <div className="App" style={{ background: "grey" }}>
         <form
           id="form"
@@ -89,5 +100,11 @@ function App() {
     </ThemeProvider>
   );
 }
+
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 export default App;
