@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useRef, useEffect, useState } from "react";
-import iconSearch from "./assets/icon-search.svg";
+import iconSearch from "./assets/imgs/icon-search.svg";
+import moon from "./assets/imgs/icon-moon.svg";
+import sun from "./assets/imgs/icon-sun.svg";
 import GlobalStyles from "./components/GlobalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./assets/themes/defaultTheme";
-import moon from "./assets/imgs/icon-moon.svg";
-import sun from "./assets/imgs/icon-sun.svg";
+import moment from "moment";
 
 const user = axios.create({
   baseURL: "https://api.github.com/users/",
@@ -14,19 +15,20 @@ const user = axios.create({
 function App() {
   // const userInputValue = useRef("octocat");
   const [userInputValue, setUserInputValue] = useState("octocat");
-  const [userObj, setUSerObj] = useState();
+  const [userObj, setUSerObj] = useState({});
 
-  const [theme, setTheme] = useState("light");
+  const [modeTheme, setModeTheme] = useState("light");
 
   useEffect(() => {
     const apiConnector = setTimeout(() => {
       async function getUser() {
         const response = await user.get(userInputValue);
+        console.log(response.data);
         setUSerObj(response.data);
       }
       getUser();
       console.log("get");
-    }, 1000);
+    }, 0);
 
     return () => {
       console.log("resp");
@@ -44,67 +46,220 @@ function App() {
     getUser();
   }
 
-  if (userObj) {
-    const {
-      name,
-      created_at,
-      public_repos,
-      followers,
-      following,
-      location,
-      blog,
-      twitter_username,
-      company,
-    } = userObj;
-    // console.log(
-    //   name,
-    //   created_at,
-    //   public_repos,
-    //   followers,
-    //   following,
-    //   location,
-    //   blog,
-    //   twitter_username,
-    //   company
-    // );
-  }
+  let {
+    avatar_url,
+    name,
+    login,
+    created_at,
+    public_repos,
+    followers,
+    following,
+    location,
+    blog,
+    twitter_username,
+    company,
+  } = userObj;
+  console.log(
+    avatar_url,
+    name,
+    created_at,
+    public_repos,
+    followers,
+    following,
+    location,
+    blog,
+    twitter_username,
+    company
+  );
 
-  console.log(userObj);
+  const userCreateDate = moment(created_at).format("ll");
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
-      <Header>
-        <h2>devfinder</h2>
-        <button>
-          <span>{theme === "light" ? "light" : "dark"}</span>
-          <img src={theme === "light" ? sun : moon} alt="" />
-        </button>
-      </Header>
-      <div className="App" style={{ background: "grey" }}>
-        <form
-          id="form"
-          onSubmit={submitHandler}
-          style={{ padding: "500px 600px" }}
-        >
+      <MainContainer modeTheme={modeTheme}>
+        <Header modeTheme={modeTheme}>
+          <h1>devfinder</h1>
+          <button
+            onClick={() =>
+              modeTheme === "light"
+                ? setModeTheme("dark")
+                : setModeTheme("light")
+            }
+          >
+            <span>{modeTheme === "light" ? "dark" : "light"}</span>
+            <img
+              src={modeTheme === "light" ? moon : sun}
+              alt={modeTheme === "light" ? "moon" : "sun"}
+            />
+          </button>
+        </Header>
+        <Form id="form" onSubmit={submitHandler} modeTheme={modeTheme}>
           <img src={iconSearch} alt="" />
           <input
             // ref={userInputValue}
             value={userInputValue}
             onChange={(e) => setUserInputValue(e.target.value)}
+            placeholder="Search GitHub username…"
           />
           <button type="submit">Search</button>
-        </form>
-        <p>userObj</p>
-      </div>
+        </Form>
+        <Main modeTheme={modeTheme}>
+          <UserHeader modeTheme={modeTheme}>
+            <img src={avatar_url} alt="User profile photo" />
+            <div>
+              <p>{name}</p>
+              <h3>{login}</h3>
+              <span>Joined {userCreateDate}</span>
+            </div>
+          </UserHeader>
+          <div></div>
+        </Main>
+      </MainContainer>
     </ThemeProvider>
   );
 }
 
+const MainContainer = styled.div`
+  @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  min-width: 375px;
+  width: 100%;
+  padding: 31px 24px 79px 24px;
+  background: ${({ theme, modeTheme }) =>
+    modeTheme === "light"
+      ? theme.colors.light.ivory
+      : theme.colors.dark.darkBlue};
+`;
+
 const Header = styled.header`
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  width: 327px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 35px;
+
+  h1 {
+    line-height: 39px;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light"
+        ? theme.colors.dark.midnightExpress
+        : theme.colors.white};
+  }
+
+  button {
+    font-family: "Space Mono", monospace;
+    font-weight: 700;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: none;
+    background: none;
+  }
+`;
+
+const Form = styled.form`
+  width: 327px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: ${({ theme, modeTheme }) =>
+    modeTheme === "light"
+      ? theme.colors.dark.white1
+      : theme.colors.light.purple};
+  border-radius: 15px;
+  margin-bottom: 16px;
+  box-shadow: 0px 16px 30px -10px rgba(70, 96, 187, 0.198567);
+
+  img {
+    width: 17.7px;
+    margin: 20px 11px 22px 16px;
+  }
+
+  input {
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 25px;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+    background: ${({ theme, modeTheme }) =>
+      modeTheme === "light"
+        ? theme.colors.dark.white1
+        : theme.colors.light.purple};
+    margin: 18px 7px 17px 0;
+    border: none;
+    outline: none;
+    caret-color: ${({ theme }) => theme.colors.dadgerBlue};
+
+    &::placeholder {
+      color: ${({ theme, modeTheme }) =>
+        modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+    }
+  }
+
+  button {
+    font-family: "Space Mono", monospace;
+    font-weight: 700;
+    line-height: 21px;
+    color: ${({ theme }) => theme.colors.white};
+    width: 84px;
+    padding: 12.5px 14px 12.5px 18px;
+    margin: 6.5px 7px 7.5px 0;
+    border: none;
+    background: ${({ theme }) => theme.colors.dadgerBlue};
+    border-radius: 10px;
+  }
+`;
+
+const Main = styled.main`
+  color: ${({ theme, modeTheme }) =>
+    modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+  box-shadow: 0px 16px 30px -10px rgba(70, 96, 187, 0.198567);
+  border-radius: 15px;
+  background: ${({ theme, modeTheme }) =>
+    modeTheme === "light"
+      ? theme.colors.dark.white1
+      : theme.colors.light.purple};
+  padding: 32px 24px 48px;
+`;
+
+const UserHeader = styled.div`
+  display: flex;
+  gap: 19px;
+
+  img {
+    width: 70px;
+    border-radius: 50%;
+    /* height: 20px; */
+  }
+
+  p {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
+  }
+
+  h3 {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 19px;
+  }
+
+  span {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 19px;
+  }
 `;
 
 export default App;

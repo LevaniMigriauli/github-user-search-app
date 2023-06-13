@@ -1,11 +1,21 @@
 export const defaultTheme = {
   colors: {
-    lightGreen: "#20EEB0",
+    dark: {
+      stone: "#697C9A",
+      licorice: "#2B3442",
+      // ivory: "#F6F8FF",
+      white1: "#FEFEFE",
+      midnightExpress: "#222731",
+      darkBlue: "#141D2F",
+    },
+    light: {
+      whiteSmoke: "#F2F2F2",
+      ivory: "#F6F8FF",
+      purple: "#1E2A47",
+    },
     white: "#fff",
-    lightGrey: "#ebeff2",
-    grey: "#888888",
-    darkBlack: "#0d0d0d",
-    blue: "#007FDB",
-    background: "#f1f1f1",
+    brightRed: "#F74646",
+    dadgerBlue: "#0079FF",
+    steel: "#4B6A9B",
   },
 };
