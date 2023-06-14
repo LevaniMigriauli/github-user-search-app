@@ -46,9 +46,10 @@ function App() {
     getUser();
   }
 
-  let {
+  const {
     avatar_url,
     name,
+    bio,
     login,
     created_at,
     public_repos,
@@ -62,6 +63,8 @@ function App() {
   console.log(
     avatar_url,
     name,
+    bio,
+    login,
     created_at,
     public_repos,
     followers,
@@ -113,7 +116,15 @@ function App() {
               <span>Joined {userCreateDate}</span>
             </div>
           </UserHeader>
-          <div></div>
+          <Bio modeTheme={modeTheme}>{bio || "No result"}</Bio>
+          <NumberInfos modeTheme={modeTheme}>
+            <h4>Repos</h4>
+            <h4>Followers</h4>
+            <h4>Following</h4>
+            <span>{public_repos}</span>
+            <span>{followers}</span>
+            <span>{following}</span>
+          </NumberInfos>
         </Main>
       </MainContainer>
     </ThemeProvider>
@@ -220,8 +231,8 @@ const Form = styled.form`
 `;
 
 const Main = styled.main`
-  color: ${({ theme, modeTheme }) =>
-    modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+  /* color: ${({ theme, modeTheme }) =>
+    modeTheme === "light" ? theme.colors.steel : theme.colors.white}; */
   box-shadow: 0px 16px 30px -10px rgba(70, 96, 187, 0.198567);
   border-radius: 15px;
   background: ${({ theme, modeTheme }) =>
@@ -229,16 +240,19 @@ const Main = styled.main`
       ? theme.colors.dark.white1
       : theme.colors.light.purple};
   padding: 32px 24px 48px;
+  width: 327px;
 `;
 
 const UserHeader = styled.div`
   display: flex;
   gap: 19px;
+  margin-bottom: 33px;
 
   img {
     width: 70px;
+
+    height: 70px;
     border-radius: 50%;
-    /* height: 20px; */
   }
 
   p {
@@ -253,12 +267,57 @@ const UserHeader = styled.div`
     font-weight: 400;
     font-size: 13px;
     line-height: 19px;
+    color: ${({ theme }) => theme.colors.dadgerBlue};
+    margin-bottom: 6px;
   }
 
   span {
     font-weight: 400;
     font-size: 13px;
     line-height: 19px;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.light.steel : theme.colors.white};
+  }
+`;
+
+const Bio = styled.p`
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 25px;
+  color: ${({ theme, modeTheme }) =>
+    modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+  margin-bottom: 23px;
+`;
+
+const NumberInfos = styled.div`
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 8px;
+  background: ${({ theme, modeTheme }) =>
+    modeTheme === "light"
+      ? theme.colors.light.ivory
+      : theme.colors.dark.darkBlue};
+  padding: 18px 14px 19px 15px;
+  margin-bottom: 24px;
+  border-radius: 10px;
+
+  h4 {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 16px;
+
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+  }
+
+  span {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
   }
 `;
 
