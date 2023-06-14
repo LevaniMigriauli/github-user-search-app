@@ -1,8 +1,13 @@
 import axios from "axios";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, Fragment } from "react";
 import iconSearch from "./assets/imgs/icon-search.svg";
 import moon from "./assets/imgs/icon-moon.svg";
 import sun from "./assets/imgs/icon-sun.svg";
+import locationIcon from "./assets/imgs/icon-location.svg";
+import websiteIcon from "./assets/imgs/icon-website.svg";
+import twitterIcon from "./assets/imgs/icon-twitter.svg";
+import companyIcon from "./assets/imgs/icon-company.svg";
+
 import GlobalStyles from "./components/GlobalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { defaultTheme } from "./assets/themes/defaultTheme";
@@ -75,6 +80,13 @@ function App() {
     company
   );
 
+  const iconsArr = [
+    [locationIcon, location],
+    [websiteIcon, blog],
+    [twitterIcon, twitter_username],
+    [companyIcon, company],
+  ];
+
   const userCreateDate = moment(created_at).format("ll");
 
   return (
@@ -112,11 +124,11 @@ function App() {
             <img src={avatar_url} alt="User profile photo" />
             <div>
               <p>{name}</p>
-              <h3>{login}</h3>
+              <h3>@{login}</h3>
               <span>Joined {userCreateDate}</span>
             </div>
           </UserHeader>
-          <Bio modeTheme={modeTheme}>{bio || "No result"}</Bio>
+          <Bio modeTheme={modeTheme}>{bio || "This profile has no bio"}</Bio>
           <NumberInfos modeTheme={modeTheme}>
             <h4>Repos</h4>
             <h4>Followers</h4>
@@ -125,6 +137,40 @@ function App() {
             <span>{followers}</span>
             <span>{following}</span>
           </NumberInfos>
+          <SocNewtworks modeTheme={modeTheme} iconsArr={iconsArr}>
+            {/* <img alt="location icon" /> */}
+            {iconsArr.map((networkInfo) => {
+              return (
+                <Fragment>
+                  <div
+                    style={{
+                      webkitMask: `url(${networkInfo[0]}) no-repeat center`,
+                      mask: `url(${networkInfo[0]}) no-repeat center`,
+                      background: `${
+                        !networkInfo[1]
+                          ? "#999"
+                          : modeTheme === "light"
+                          ? defaultTheme.colors.steel
+                          : defaultTheme.colors.white
+                      }`,
+                    }}
+                  ></div>
+                  <span
+                    style={{
+                      color: !networkInfo[1]
+                        ? "#999"
+                        : modeTheme === "light"
+                        ? defaultTheme.colors.steel
+                        : defaultTheme.colors.white,
+                    }}
+                    networkInfo={networkInfo[1]}
+                  >
+                    {networkInfo[1] || "Not available"}
+                  </span>
+                </Fragment>
+              );
+            })}
+          </SocNewtworks>
         </Main>
       </MainContainer>
     </ThemeProvider>
@@ -259,6 +305,7 @@ const UserHeader = styled.div`
     font-weight: 700;
     font-size: 16px;
     line-height: 24px;
+    height: 24px;
     color: ${({ theme, modeTheme }) =>
       modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
   }
@@ -318,6 +365,44 @@ const NumberInfos = styled.div`
 
     color: ${({ theme, modeTheme }) =>
       modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
+  }
+`;
+
+const SocNewtworks = styled.div`
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  column-gap: 13px;
+  row-gap: 16px;
+  align-items: center;
+  color: ${({ theme, modeTheme }) =>
+    modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+
+  div {
+    /* fill-rule: "nonzero"; */
+    /* mask: src={locationIcon} ; */
+
+    /* background-color: red; */
+    /* -webkit-mask: url(locationIcon) no-repeat center; */
+    /* mask: url(${locationIcon}) no-repeat center; */
+
+    background: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+
+    width: 20px;
+    height: 20px;
+  }
+
+  span {
+    color: ${({ theme, modeTheme, iconsArr }) =>
+      !iconsArr[1][1]
+        ? "#999"
+        : modeTheme === "light"
+        ? theme.colors.steel
+        : theme.colors.white};
+
+    &:nth-child(4):hover {
+      text-decoration-line: underline;
+    }
   }
 `;
 
