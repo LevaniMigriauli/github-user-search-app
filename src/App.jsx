@@ -22,7 +22,11 @@ function App() {
   const [userInputValue, setUserInputValue] = useState("octocat");
   const [userObj, setUSerObj] = useState({});
 
-  const [modeTheme, setModeTheme] = useState("light");
+  const [modeTheme, setModeTheme] = useState(
+    localStorage.getItem("theme") || "light"
+  );
+
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const apiConnector = setTimeout(() => {
@@ -41,14 +45,23 @@ function App() {
     };
   }, []);
 
-  function submitHandler(e) {
-    e.preventDefault();
+  useEffect(() => {
+    localStorage.setItem("theme", modeTheme);
+  }, [modeTheme]);
 
-    async function getUser() {
-      const response = await user.get(`${userInputValue || "octocat"}`);
-      setUSerObj(response.data);
+  async function submitHandler(e) {
+    try {
+      e.preventDefault();
+      if (userInputValue) {
+        const response = await user.get(`${userInputValue || "octocat"}`);
+        const repo = await response.data;
+        repo && setUSerObj(repo);
+        setUserInputValue("");
+        setError("");
+      }
+    } catch {
+      setError("No Result");
     }
-    getUser();
   }
 
   const {
@@ -93,85 +106,89 @@ function App() {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <MainContainer modeTheme={modeTheme}>
-        <Header modeTheme={modeTheme}>
-          <h1>devfinder</h1>
-          <button
-            onClick={() =>
-              modeTheme === "light"
-                ? setModeTheme("dark")
-                : setModeTheme("light")
-            }
-          >
-            <span>{modeTheme === "light" ? "dark" : "light"}</span>
-            <img
-              src={modeTheme === "light" ? moon : sun}
-              alt={modeTheme === "light" ? "moon" : "sun"}
+        <div>
+          <Header modeTheme={modeTheme}>
+            <h1>devfinder</h1>
+            <button
+              onClick={() =>
+                modeTheme === "light"
+                  ? setModeTheme("dark")
+                  : setModeTheme("light")
+              }
+            >
+              <span>{modeTheme === "light" ? "dark" : "light"}</span>
+              <img
+                src={modeTheme === "light" ? moon : sun}
+                alt={modeTheme === "light" ? "moon" : "sun"}
+              />
+            </button>
+          </Header>
+          <Form id="form" onSubmit={submitHandler} modeTheme={modeTheme}>
+            <img src={iconSearch} alt="" />
+            <input
+              // ref={userInputValue}
+              value={userInputValue}
+              onChange={(e) =>
+                e.target.value.length < 17 && setUserInputValue(e.target.value)
+              }
+              placeholder="Search GitHub username…"
             />
-          </button>
-        </Header>
-        <Form id="form" onSubmit={submitHandler} modeTheme={modeTheme}>
-          <img src={iconSearch} alt="" />
-          <input
-            // ref={userInputValue}
-            value={userInputValue}
-            onChange={(e) => setUserInputValue(e.target.value)}
-            placeholder="Search GitHub username…"
-          />
-          <button type="submit">Search</button>
-        </Form>
-        <Main modeTheme={modeTheme}>
-          <UserHeader modeTheme={modeTheme}>
-            <img src={avatar_url} alt="User profile photo" />
-            <div>
-              <p>{name}</p>
-              <h3>@{login}</h3>
-              <span>Joined {userCreateDate}</span>
-            </div>
-          </UserHeader>
-          <Bio modeTheme={modeTheme}>{bio || "This profile has no bio"}</Bio>
-          <NumberInfos modeTheme={modeTheme}>
-            <h4>Repos</h4>
-            <h4>Followers</h4>
-            <h4>Following</h4>
-            <span>{public_repos}</span>
-            <span>{followers}</span>
-            <span>{following}</span>
-          </NumberInfos>
-          <SocNewtworks modeTheme={modeTheme} iconsArr={iconsArr}>
-            {/* <img alt="location icon" /> */}
-            {iconsArr.map((networkInfo) => {
-              return (
-                <Fragment>
-                  <div
-                    style={{
-                      webkitMask: `url(${networkInfo[0]}) no-repeat center`,
-                      mask: `url(${networkInfo[0]}) no-repeat center`,
-                      background: `${
-                        !networkInfo[1]
+            <span style={{ color: "red" }}>{error}</span>
+            <button type="submit">Search</button>
+          </Form>
+          <Main modeTheme={modeTheme}>
+            <UserHeader modeTheme={modeTheme}>
+              <img src={avatar_url} alt="User profile photo" />
+              <div>
+                <p>{name}</p>
+                <h3>@{login}</h3>
+                <span>Joined {userCreateDate}</span>
+              </div>
+            </UserHeader>
+            <Bio modeTheme={modeTheme}>{bio || "This profile has no bio"}</Bio>
+            <NumberInfos modeTheme={modeTheme}>
+              <h4>Repos</h4>
+              <h4>Followers</h4>
+              <h4>Following</h4>
+              <span>{public_repos}</span>
+              <span>{followers}</span>
+              <span>{following}</span>
+            </NumberInfos>
+            <SocNewtworks modeTheme={modeTheme} iconsArr={iconsArr}>
+              {/* <img alt="location icon" /> */}
+              {iconsArr.map((networkInfo, index) => {
+                return (
+                  <Fragment key={index}>
+                    <div
+                      style={{
+                        webkitMask: `url(${networkInfo[0]}) no-repeat center`,
+                        mask: `url(${networkInfo[0]}) no-repeat center`,
+                        background: `${
+                          !networkInfo[1]
+                            ? "#999"
+                            : modeTheme === "light"
+                            ? defaultTheme.colors.steel
+                            : defaultTheme.colors.white
+                        }`,
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        color: !networkInfo[1]
                           ? "#999"
                           : modeTheme === "light"
                           ? defaultTheme.colors.steel
-                          : defaultTheme.colors.white
-                      }`,
-                    }}
-                  ></div>
-                  <span
-                    style={{
-                      color: !networkInfo[1]
-                        ? "#999"
-                        : modeTheme === "light"
-                        ? defaultTheme.colors.steel
-                        : defaultTheme.colors.white,
-                    }}
-                    networkInfo={networkInfo[1]}
-                  >
-                    {networkInfo[1] || "Not available"}
-                  </span>
-                </Fragment>
-              );
-            })}
-          </SocNewtworks>
-        </Main>
+                          : defaultTheme.colors.white,
+                      }}
+                    >
+                      {networkInfo[1] || "Not available"}
+                    </span>
+                  </Fragment>
+                );
+              })}
+            </SocNewtworks>
+          </Main>
+        </div>
       </MainContainer>
     </ThemeProvider>
   );
@@ -188,6 +205,8 @@ const MainContainer = styled.div`
     modeTheme === "light"
       ? theme.colors.light.ivory
       : theme.colors.dark.darkBlue};
+  display: flex;
+  justify-content: center;
 `;
 
 const Header = styled.header`
@@ -234,6 +253,7 @@ const Form = styled.form`
   border-radius: 15px;
   margin-bottom: 16px;
   box-shadow: 0px 16px 30px -10px rgba(70, 96, 187, 0.198567);
+  position: relative;
 
   img {
     width: 17.7px;
@@ -260,6 +280,14 @@ const Form = styled.form`
       color: ${({ theme, modeTheme }) =>
         modeTheme === "light" ? theme.colors.steel : theme.colors.white};
     }
+  }
+
+  span {
+    font-size: 13px;
+    position: absolute;
+    right: 95px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   button {
@@ -393,6 +421,7 @@ const SocNewtworks = styled.div`
   }
 
   span {
+    font-size: 13px;
     color: ${({ theme, modeTheme, iconsArr }) =>
       !iconsArr[1][1]
         ? "#999"
