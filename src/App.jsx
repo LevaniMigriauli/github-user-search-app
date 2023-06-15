@@ -10,7 +10,7 @@ import companyIcon from "./assets/imgs/icon-company.svg";
 
 import GlobalStyles from "./components/GlobalStyles";
 import styled, { ThemeProvider } from "styled-components";
-import { base, defaultTheme } from "./assets/themes/defaultTheme";
+import { breakpoints, defaultTheme } from "./assets/themes/defaultTheme";
 import moment from "moment";
 
 const user = axios.create({
@@ -106,7 +106,7 @@ function App() {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
       <MainContainer modeTheme={modeTheme}>
-        <div>
+        <Center>
           <Header modeTheme={modeTheme}>
             <h1>devfinder</h1>
             <button
@@ -188,7 +188,7 @@ function App() {
               })}
             </SocNewtworks>
           </Main>
-        </div>
+        </Center>
       </MainContainer>
     </ThemeProvider>
   );
@@ -198,7 +198,8 @@ const MainContainer = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap");
   font-family: "Space Mono", monospace;
   font-weight: 400;
-  min-width: 375px;
+  /* min-width: 375px; */
+
   width: 100%;
   padding: 31px 24px 79px 24px;
   background: ${({ theme, modeTheme }) =>
@@ -207,12 +208,24 @@ const MainContainer = styled.div`
       : theme.colors.dark.darkBlue};
   display: flex;
   justify-content: center;
+
+  @media (min-width: ${breakpoints.tablet}) {
+    padding: 144px 24px 236px 24px;
+  }
+`;
+
+const Center = styled.div`
+  width: 327px;
+
+  @media (min-width: ${breakpoints.tablet}) {
+    width: 580px;
+  }
 `;
 
 const Header = styled.header`
   font-family: "Space Mono", monospace;
   font-weight: 700;
-  width: 327px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -241,7 +254,7 @@ const Header = styled.header`
 `;
 
 const Form = styled.form`
-  width: 327px;
+  /* width: 327px; */
   height: 60px;
   display: flex;
   justify-content: space-between;
@@ -255,9 +268,18 @@ const Form = styled.form`
   box-shadow: 0px 16px 30px -10px rgba(70, 96, 187, 0.198567);
   position: relative;
 
+  @media (min-width: ${breakpoints.tablet}) {
+    height: 69px;
+  }
+
   img {
     width: 17.7px;
     margin: 20px 11px 22px 16px;
+
+    @media (min-width: ${breakpoints.tablet}) {
+      width: 24px;
+      margin: 23px 24px 22px 32px;
+    }
   }
 
   input {
@@ -280,6 +302,12 @@ const Form = styled.form`
       color: ${({ theme, modeTheme }) =>
         modeTheme === "light" ? theme.colors.steel : theme.colors.white};
     }
+
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 18px;
+      width: 254px;
+      margin-right: 144px;
+    }
   }
 
   span {
@@ -288,19 +316,29 @@ const Form = styled.form`
     right: 95px;
     top: 50%;
     transform: translateY(-50%);
+
+    @media (min-width: ${breakpoints.tablet}) {
+      right: 125px;
+    }
   }
 
   button {
     font-family: "Space Mono", monospace;
+    font-size: 14px;
     font-weight: 700;
     line-height: 21px;
     color: ${({ theme }) => theme.colors.white};
-    width: 84px;
     padding: 12.5px 14px 12.5px 18px;
     margin: 6.5px 7px 7.5px 0;
     border: none;
     background: ${({ theme }) => theme.colors.dadgerBlue};
     border-radius: 10px;
+
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 16px;
+      line-height: 24px;
+      padding: 12.5px 23px 13.5px 24px;
+    }
   }
 `;
 
@@ -314,7 +352,10 @@ const Main = styled.main`
       ? theme.colors.dark.white1
       : theme.colors.light.purple};
   padding: 32px 24px 48px;
-  width: 327px;
+
+  @media (min-width: ${breakpoints.tablet}) {
+    padding: 40px;
+  }
 `;
 
 const UserHeader = styled.div`
@@ -322,36 +363,67 @@ const UserHeader = styled.div`
   gap: 19px;
   margin-bottom: 33px;
 
+  @media (min-width: ${breakpoints.tablet}) {
+    margin-bottom: 24px;
+  }
+
   img {
     width: 70px;
-
     height: 70px;
     border-radius: 50%;
+
+    @media (min-width: ${breakpoints.tablet}) {
+      width: 117px;
+      height: 117px;
+    }
   }
 
-  p {
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 24px;
-    height: 24px;
-    color: ${({ theme, modeTheme }) =>
-      modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
-  }
+  div {
+    @media (min-width: ${breakpoints.tablet}) {
+      padding-top: 12px;
+    }
+    p {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 24px;
+      height: 24px;
+      color: ${({ theme, modeTheme }) =>
+        modeTheme === "light"
+          ? theme.colors.dark.licorice
+          : theme.colors.white};
 
-  h3 {
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 19px;
-    color: ${({ theme }) => theme.colors.dadgerBlue};
-    margin-bottom: 6px;
-  }
+      @media (min-width: ${breakpoints.tablet}) {
+        font-size: 26px;
+        line-height: 39px;
+        margin-bottom: 2px;
+      }
+    }
 
-  span {
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 19px;
-    color: ${({ theme, modeTheme }) =>
-      modeTheme === "light" ? theme.colors.light.steel : theme.colors.white};
+    h3 {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      color: ${({ theme }) => theme.colors.dadgerBlue};
+      margin-bottom: 6px;
+
+      @media (min-width: ${breakpoints.tablet}) {
+        font-size: 16px;
+        line-height: 24px;
+      }
+    }
+
+    span {
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 19px;
+      color: ${({ theme, modeTheme }) =>
+        modeTheme === "light" ? theme.colors.light.steel : theme.colors.white};
+
+      @media (min-width: ${breakpoints.tablet}) {
+        font-size: 15px;
+        line-height: 22px;
+      }
+    }
   }
 `;
 
@@ -362,6 +434,11 @@ const Bio = styled.p`
   color: ${({ theme, modeTheme }) =>
     modeTheme === "light" ? theme.colors.steel : theme.colors.white};
   margin-bottom: 23px;
+
+  @media (min-width: ${breakpoints.tablet}) {
+    font-size: 15px;
+    margin-bottom: 32px;
+  }
 `;
 
 const NumberInfos = styled.div`
@@ -377,6 +454,12 @@ const NumberInfos = styled.div`
   margin-bottom: 24px;
   border-radius: 10px;
 
+  @media (min-width: ${breakpoints.tablet}) {
+    text-align: left;
+    padding: 15px 0 17px 32px;
+    row-gap: 1px;
+  }
+
   h4 {
     font-size: 11px;
     font-weight: 400;
@@ -384,15 +467,24 @@ const NumberInfos = styled.div`
 
     color: ${({ theme, modeTheme }) =>
       modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 13px;
+      line-height: 19px;
+    }
   }
 
   span {
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
-
     color: ${({ theme, modeTheme }) =>
       modeTheme === "light" ? theme.colors.dark.licorice : theme.colors.white};
+
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 22px;
+      line-height: 33px;
+    }
   }
 `;
 
@@ -404,6 +496,10 @@ const SocNewtworks = styled.div`
   align-items: center;
   color: ${({ theme, modeTheme }) =>
     modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+
+  @media (min-width: ${breakpoints.tablet}) {
+    grid-template-columns: 20px 1fr 20px 1fr;
+  }
 
   div {
     /* fill-rule: "nonzero"; */
@@ -418,6 +514,29 @@ const SocNewtworks = styled.div`
 
     width: 20px;
     height: 20px;
+
+    &:nth-child(3) {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 5;
+        grid-column: 1/2;
+        grid-row: 2/3;
+      }
+    }
+
+    &:nth-child(5) {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 3;
+        grid-column: 3/4;
+        grid-row: 1/2;
+      }
+    }
+    &:nth-child(7) {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 7;
+        grid-column: 3/4;
+        grid-row: 2/3;
+      }
+    }
   }
 
   span {
@@ -429,8 +548,35 @@ const SocNewtworks = styled.div`
         ? theme.colors.steel
         : theme.colors.white};
 
-    &:nth-child(4):hover {
-      text-decoration-line: underline;
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 15px;
+    }
+
+    &:nth-child(4) {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 6;
+        grid-column: 2/3;
+        grid-row: 2/3;
+      }
+
+      &:hover {
+        text-decoration-line: underline;
+      }
+    }
+
+    &:nth-child(6) {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 4;
+        grid-column: 4/5;
+        grid-row: 1/2;
+      }
+    }
+    &:last-child {
+      @media (min-width: ${breakpoints.tablet}) {
+        order: 8;
+        grid-column: 4/5;
+        grid-row: 2/3;
+      }
     }
   }
 `;
