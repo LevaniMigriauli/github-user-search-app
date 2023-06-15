@@ -142,8 +142,15 @@ function App() {
               <div>
                 <p>{name}</p>
                 <h3>@{login}</h3>
-                <span>Joined {userCreateDate}</span>
+                {window.innerWidth > 800 || (
+                  <span>Joined {userCreateDate}</span>
+                )}
               </div>
+              {window.innerWidth <= 800 || (
+                <span style={{ justifySelf: "end", marginTop: "12px" }}>
+                  Joined {userCreateDate}
+                </span>
+              )}
             </UserHeader>
             <Bio modeTheme={modeTheme}>{bio || "This profile has no bio"}</Bio>
             <NumberInfos modeTheme={modeTheme}>
@@ -220,6 +227,10 @@ const Center = styled.div`
   @media (min-width: ${breakpoints.tablet}) {
     width: 580px;
   }
+
+  @media (min-width: ${breakpoints.desktop}) {
+    width: 800px;
+  }
 `;
 
 const Header = styled.header`
@@ -250,6 +261,10 @@ const Header = styled.header`
     gap: 16px;
     border: none;
     background: none;
+  }
+
+  span {
+    letter-spacing: 2.5px;
   }
 `;
 
@@ -308,6 +323,10 @@ const Form = styled.form`
       width: 254px;
       margin-right: 144px;
     }
+
+    @media (min-width: ${breakpoints.desktop}) {
+      margin-right: 340px;
+    }
   }
 
   span {
@@ -356,6 +375,9 @@ const Main = styled.main`
   @media (min-width: ${breakpoints.tablet}) {
     padding: 40px;
   }
+  @media (min-width: ${breakpoints.desktop}) {
+    padding: 48px 48px 48px 202px;
+  }
 `;
 
 const UserHeader = styled.div`
@@ -365,6 +387,13 @@ const UserHeader = styled.div`
 
   @media (min-width: ${breakpoints.tablet}) {
     margin-bottom: 24px;
+  }
+  @media (min-width: ${breakpoints.desktop}) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 37px;
+    position: relative;
+    margin-bottom: 20px;
   }
 
   img {
@@ -376,11 +405,19 @@ const UserHeader = styled.div`
       width: 117px;
       height: 117px;
     }
+    @media (min-width: ${breakpoints.desktop}) {
+      position: absolute;
+      left: -154px;
+    }
   }
 
   div {
     @media (min-width: ${breakpoints.tablet}) {
       padding-top: 12px;
+    }
+
+    @media (min-width: ${breakpoints.desktop}) {
+      padding-top: 4px;
     }
     p {
       font-weight: 700;
@@ -411,18 +448,18 @@ const UserHeader = styled.div`
         line-height: 24px;
       }
     }
+  }
 
-    span {
-      font-weight: 400;
-      font-size: 13px;
-      line-height: 19px;
-      color: ${({ theme, modeTheme }) =>
-        modeTheme === "light" ? theme.colors.light.steel : theme.colors.white};
+  span {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 19px;
+    color: ${({ theme, modeTheme }) =>
+      modeTheme === "light" ? theme.colors.light.steel : theme.colors.white};
 
-      @media (min-width: ${breakpoints.tablet}) {
-        font-size: 15px;
-        line-height: 22px;
-      }
+    @media (min-width: ${breakpoints.tablet}) {
+      font-size: 15px;
+      line-height: 22px;
     }
   }
 `;
