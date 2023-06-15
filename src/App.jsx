@@ -10,7 +10,7 @@ import companyIcon from "./assets/imgs/icon-company.svg";
 
 import GlobalStyles from "./components/GlobalStyles";
 import styled, { ThemeProvider } from "styled-components";
-import { defaultTheme } from "./assets/themes/defaultTheme";
+import { base, defaultTheme } from "./assets/themes/defaultTheme";
 import moment from "moment";
 
 const user = axios.create({

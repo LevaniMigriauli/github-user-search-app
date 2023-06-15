@@ -19,3 +19,10 @@ export const defaultTheme = {
     steel: "#4B6A9B",
   },
 };
+
+export const base = {
+  breakpoints: {
+    tablet: "580px",
+    desktop: "740px",
+  },
+};
