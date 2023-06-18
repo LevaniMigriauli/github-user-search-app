@@ -117,10 +117,21 @@ function App() {
               }
             >
               <span>{modeTheme === "light" ? "dark" : "light"}</span>
-              <img
-                src={modeTheme === "light" ? moon : sun}
-                alt={modeTheme === "light" ? "moon" : "sun"}
-              />
+              <div
+                style={{
+                  webkitMask: `url(${
+                    modeTheme === "light" ? moon : sun
+                  }) no-repeat center`,
+                  mask: `url(${
+                    modeTheme === "light" ? moon : sun
+                  }) no-repeat center`,
+                  // width: "20px",
+                  // height: "20px",
+                  // background: "red",
+                  width: "20px",
+                  height: "20px",
+                }}
+              ></div>
             </button>
           </Header>
           <Form id="form" onSubmit={submitHandler} modeTheme={modeTheme}>
@@ -161,7 +172,12 @@ function App() {
               <span>{followers}</span>
               <span>{following}</span>
             </NumberInfos>
-            <SocNewtworks modeTheme={modeTheme} iconsArr={iconsArr}>
+            <SocNewtworks
+              networkInfo={iconsArr[1][1]}
+              modeTheme={modeTheme}
+              iconsArr={iconsArr}
+            >
+              {/* {console.log(iconsArr[1][1] ? iconsArr[1][1] : 5)} */}
               {/* <img alt="location icon" /> */}
               {iconsArr.map((networkInfo, index) => {
                 return (
@@ -180,6 +196,9 @@ function App() {
                       }}
                     ></div>
                     <span
+                      // networkInfo={iconsArr[1][1]}
+                      // modeTheme={modeTheme}
+                      // iconsArr={iconsArr}
                       style={{
                         color: !networkInfo[1]
                           ? "#999"
@@ -187,7 +206,12 @@ function App() {
                           ? defaultTheme.colors.steel
                           : defaultTheme.colors.white,
                       }}
+                      // key={index}
                     >
+                      {/* {console.log(
+                        networkInfo[1],
+                        networkInfo[1] ? typeof networkInfo[1] : ""
+                      )} */}
                       {networkInfo[1] || "Not available"}
                     </span>
                   </Fragment>
@@ -261,10 +285,25 @@ const Header = styled.header`
     gap: 16px;
     border: none;
     background: none;
-  }
 
-  span {
-    letter-spacing: 2.5px;
+    &:hover {
+      color: ${({ theme, modeTheme }) =>
+        modeTheme === "light" ? "#222731" : "#90A4D4"};
+
+      div {
+        background: ${({ theme, modeTheme }) =>
+          modeTheme === "light" ? "#222731" : "#90A4D4"};
+      }
+    }
+
+    span {
+      letter-spacing: 2.5px;
+    }
+
+    div {
+      background: ${({ theme, modeTheme }) =>
+        modeTheme === "light" ? theme.colors.steel : theme.colors.white};
+    }
   }
 `;
 
@@ -597,7 +636,8 @@ const SocNewtworks = styled.div`
       }
 
       &:hover {
-        text-decoration-line: underline;
+        text-decoration-line: ${({ networkInfo }) =>
+          networkInfo ? "underline" : "none"};
       }
     }
 
@@ -617,5 +657,9 @@ const SocNewtworks = styled.div`
     }
   }
 `;
+
+// const NewtworkAdress = styled.span`
+
+// `;
 
 export default App;
