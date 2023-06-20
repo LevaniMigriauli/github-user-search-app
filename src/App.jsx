@@ -249,7 +249,7 @@ const MainContainer = styled.div`
   font-family: "Space Mono", monospace;
   font-weight: 400;
   /* min-width: 375px; */
-
+  /* height: 100vh; */
   width: 100%;
   padding: 31px 24px 79px 24px;
   background: ${({ theme, modeTheme }) =>
@@ -260,7 +260,8 @@ const MainContainer = styled.div`
   justify-content: center;
 
   @media (min-width: ${breakpoints.tablet}) {
-    padding: 144px 24px 236px 24px;
+    padding: 144px 98px 236px 98px;
+    /* height: 100vh; */
   }
 `;
 
@@ -692,6 +693,8 @@ const GlobalStyles = createGlobalStyle`
 body{
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #141d2f;
+    height: 100vh;
 }
 `;
 

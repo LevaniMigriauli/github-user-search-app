@@ -21,6 +21,6 @@ export const defaultTheme = {
 };
 
 export const breakpoints = {
-  tablet: "640px",
-  desktop: "800px",
+  tablet: "768px",
+  desktop: "1440px",
 };
