@@ -8,19 +8,27 @@ import websiteIcon from "./assets/imgs/icon-website.svg";
 import twitterIcon from "./assets/imgs/icon-twitter.svg";
 import companyIcon from "./assets/imgs/icon-company.svg";
 
-import GlobalStyles from "./components/GlobalStyles";
+// import GlobalStyles from "./components/GlobalStyles";
 import styled, { ThemeProvider } from "styled-components";
 import { breakpoints, defaultTheme } from "./assets/themes/defaultTheme";
 import moment from "moment";
+import { createGlobalStyle } from "styled-components";
 
 const user = axios.create({
   baseURL: "https://api.github.com/users/",
+  // headers: {
+  //   "User-Agent": "request",
+  // },
 });
 
 function App() {
   // const userInputValue = useRef("octocat");
   const [userInputValue, setUserInputValue] = useState("octocat");
   const [userObj, setUSerObj] = useState({});
+
+  const [searchBtnColor, setSearchBtnColor] = useState(
+    defaultTheme.colors.dadgerBlue
+  );
 
   const [modeTheme, setModeTheme] = useState(
     localStorage.getItem("theme") || "light"
@@ -58,8 +66,10 @@ function App() {
         repo && setUSerObj(repo);
         setUserInputValue("");
         setError("");
+        setSearchBtnColor(defaultTheme.colors.dadgerBlue);
       }
     } catch {
+      setSearchBtnColor("#60ABFF");
       setError("No Result");
     }
   }
@@ -102,6 +112,7 @@ function App() {
 
   const userCreateDate = moment(created_at).format("ll");
 
+  console.log(searchBtnColor);
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyles />
@@ -134,14 +145,22 @@ function App() {
               ></div>
             </button>
           </Header>
-          <Form id="form" onSubmit={submitHandler} modeTheme={modeTheme}>
+          <Form
+            id="form"
+            onSubmit={submitHandler}
+            modeTheme={modeTheme}
+            searchBtnColor={searchBtnColor}
+          >
             <img src={iconSearch} alt="" />
             <input
               // ref={userInputValue}
+              onFocus={() => setSearchBtnColor("#60abff")}
+              onBlur={() => setSearchBtnColor(defaultTheme.colors.dadgerBlue)}
               value={userInputValue}
-              onChange={(e) =>
-                e.target.value.length < 17 && setUserInputValue(e.target.value)
-              }
+              onChange={(e) => {
+                e.target.value.length < 17 && setUserInputValue(e.target.value);
+                setSearchBtnColor("#60abff");
+              }}
               placeholder="Search GitHub username…"
             />
             <span style={{ color: "red" }}>{error}</span>
@@ -389,8 +408,12 @@ const Form = styled.form`
     padding: 12.5px 14px 12.5px 18px;
     margin: 6.5px 7px 7.5px 0;
     border: none;
-    background: ${({ theme }) => theme.colors.dadgerBlue};
+    background: ${({ searchBtnColor }) => searchBtnColor};
     border-radius: 10px;
+
+    &:hover {
+      background: #60abff;
+    }
 
     @media (min-width: ${breakpoints.tablet}) {
       font-size: 16px;
@@ -429,7 +452,7 @@ const UserHeader = styled.div`
   }
   @media (min-width: ${breakpoints.desktop}) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.8fr 1fr;
     column-gap: 37px;
     position: relative;
     margin-bottom: 20px;
@@ -658,8 +681,18 @@ const SocNewtworks = styled.div`
   }
 `;
 
-// const NewtworkAdress = styled.span`
+const GlobalStyles = createGlobalStyle`
 
-// `;
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+`;
 
 export default App;
